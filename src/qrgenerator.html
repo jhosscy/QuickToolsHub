@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Herramientas Digitales</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #f5f5f5;
+      --accent-color: #444444;
+      --highlight-color: #666666;
+      --success-color: #4CAF50;
+      --error-color: #f44336;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background-color: var(--card-bg);
+      padding: 1rem 1rem;
+      margin-bottom: 50px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+      width: 100%;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column-reverse;
+      row-gap: 1rem;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .home-link {
+      color: var(--text-color);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+    }
+
+    .home-link:hover {
+      color: var(--highlight-color);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .icon {
+      display: inline-block;
+      stroke-width: 0;
+      stroke: currentColor;
+      fill: currentColor;
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .input-group {
+      width: 100%;
+      position: relative;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 15px 15px 15px 40px;
+      border-radius: 8px;
+      border: 1px solid var(--accent-color);
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      font-size: 1rem;
+      transition: var(--transition);
+      margin: 0;
+      padding-right: 45px;
+    }
+
+    .input-group svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--highlight-color);
+    }
+
+    .input-group input::placeholder {
+      color: var(--highlight-color);
+      opacity: 0.7;
+    }
+    
+    .paste-btn {
+      position: absolute;
+      right: 3rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--highlight-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      z-index: 10;
+    }
+  
+    .paste-btn:hover {
+      color: var(--text-color);
+    }
+
+    .qr-preview-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 220px;
+      border-radius: 10px;
+      background-color: var(--card-bg);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+      margin: 0;
+      padding: 50px 20px 20px 20px;
+      position: relative;
+    }
+
+    #qr-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: zoom-in;
+      transition: var(--transition);
+      height: 100%;
+    }
+
+    .qr-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 15rem;
+      height: 15rem;
+      border: 2px dashed var(--accent-color);
+      border-radius: 8px;
+      text-align: center;
+      color: var(--highlight-color);
+      background-image: 
+        repeating-linear-gradient(0deg, var(--accent-color) 0, var(--accent-color) 1px, transparent 1px, transparent 10px),
+        repeating-linear-gradient(90deg, var(--accent-color) 0, var(--accent-color) 1px, transparent 1px, transparent 10px);
+      background-size: 10px 10px;
+      background-position: center;
+    }
+
+    .qr-placeholder svg {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 10px;
+      opacity: 0.6;
+    }
+
+    .download-btn {
+      padding: 12px 24px;
+      background-color: var(--accent-color);
+      color: var(--text-color);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+      opacity: 0;
+      pointer-events: none;
+      margin: 0;
+    }
+
+    .download-btn.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .download-btn:hover {
+      background-color: var(--highlight-color);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background-color: var(--card-bg);
+      padding: 20px;
+      z-index: 900;
+      overflow-y: auto;
+      transition: var(--transition);
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+    
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .sidebar-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    
+    .close-sidebar {
+      background: none;
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 800;
+      display: none;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    .sidebar-section {
+      margin-bottom: 25px;
+    }
+
+    .sidebar-section h3 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .format-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .radio-option input[type="radio"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--highlight-color);
+      border-radius: 50%;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .radio-option input[type="radio"]:checked {
+      border-color: var(--text-color);
+      background-color: var(--accent-color);
+      box-shadow: inset 0 0 0 4px var(--card-bg);
+    }
+
+    .parameter-control {
+      margin-bottom: 15px;
+    }
+
+    .parameter-control label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      color: var(--highlight-color);
+    }
+
+    .parameter-control input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--accent-color);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-size: 0.9rem;
+    }
+
+    #qr-stats {
+      padding: 15px;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: var(--highlight-color);
+      width: 100%;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .modal-zoom-controls {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      gap: 15px;
+      background-color: var(--card-bg);
+      padding: 10px 15px;
+      border-radius: 8px;
+    }
+
+    .modal-zoom-controls input {
+      width: 200px;
+    }
+
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    #modal-qr-container {
+      overflow: auto;
+      max-width: 100%;
+      max-height: 70vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .app-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-color);
+    }
+
+    .toggle-settings-btn {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      background: none;
+      border: none;
+      color: var(--highlight-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    .toggle-settings-btn:hover {
+      color: var(--text-color);
+    }
+
+    /* Responsive adjustments */
+    @media (min-width: 450px) {
+      header {
+        padding: 1rem 2rem;
+      }
+      nav {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .main-container {
+        padding: 0 2rem;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .app-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/" class="home-link">
+        <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        Inicio
+      </a>
+      <h1>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 3H10V10H3V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 3H21V10H14V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3 14H10V21H3V14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 14H21V21H14V14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        QR Code Generator
+      </h1>
+    </nav>
+  </header>
+
+  <main>
+    <section class="main-container">
+      <!-- Input para el texto del QR -->
+      <div class="input-group">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="text" id="qr-input" placeholder="Introduce texto, URL o datos para el QR" />
+        <button class="paste-btn" id="paste-btn" title="Pegar desde portapapeles">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Contenedor de visualización del QR -->
+      <div class="qr-preview-container">
+        <button class="toggle-settings-btn" id="settings-toggle-alt" title="Configuración">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M19.4 15C19.2669 15.3016 19.2272 15.6362 19.286 15.9606C19.3448 16.285 19.4995 16.5843 19.73 16.82L19.79 16.88C19.976 17.0657 20.1235 17.2863 20.2241 17.5291C20.3248 17.7719 20.3766 18.0322 20.3766 18.295C20.3766 18.5578 20.3248 18.8181 20.2241 19.0609C20.1235 19.3037 19.976 19.5243 19.79 19.71C19.6043 19.896 19.3837 20.0435 19.1409 20.1441C18.8981 20.2448 18.6378 20.2966 18.375 20.2966C18.1122 20.2966 17.8519 20.2448 17.6091 20.1441C17.3663 20.0435 17.1457 19.896 16.96 19.71L16.9 19.65C16.6643 19.4195 16.365 19.2648 16.0406 19.206C15.7162 19.1472 15.3816 19.1869 15.08 19.32C14.7842 19.4468 14.532 19.6572 14.3543 19.9255C14.1766 20.1938 14.0813 20.5082 14.08 20.83V21C14.08 21.5304 13.8693 22.0391 13.4942 22.4142C13.1191 22.7893 12.6104 23 12.08 23C11.5496 23 11.0409 22.7893 10.6658 22.4142C10.2907 22.0391 10.08 21.5304 10.08 21V20.91C10.0723 20.579 9.96512 20.258 9.77251 19.9887C9.5799 19.7194 9.31074 19.5143 9 19.4C8.69838 19.2669 8.36381 19.2272 8.03941 19.286C7.71502 19.3448 7.41568 19.4995 7.18 19.73L7.12 19.79C6.93425 19.976 6.71368 20.1235 6.47088 20.2241C6.22808 20.3248 5.96783 20.3766 5.705 20.3766C5.44217 20.3766 5.18192 20.3248 4.93912 20.2241C4.69632 20.1235 4.47575 19.976 4.29 19.79C4.10405 19.6043 3.95653 19.3837 3.85588 19.1409C3.75523 18.8981 3.70343 18.6378 3.70343 18.375C3.70343 18.1122 3.75523 17.8519 3.85588 17.6091C3.95653 17.3663 4.10405 17.1457 4.29 16.96L4.35 16.9C4.58054 16.6643 4.73519 16.365 4.794 16.0406C4.85282 15.7162 4.81312 15.3816 4.68 15.08C4.55324 14.7842 4.34276 14.532 4.07447 14.3543C3.80618 14.1766 3.49179 14.0813 3.17 14.08H3C2.46957 14.08 1.96086 13.8693 1.58579 13.4942C1.21071 13.1191 1 12.6104 1 12.08C1 11.5496 1.21071 11.0409 1.58579 10.6658C1.96086 10.2907 2.46957 10.08 3 10.08H3.09C3.42099 10.0723 3.742 9.96512 4.0113 9.77251C4.28059 9.5799 4.48572 9.31074 4.6 9C4.73312 8.69838 4.77282 8.36381 4.714 8.03941C4.65519 7.71502 4.50054 7.41568 4.27 7.18L4.21 7.12C4.02405 6.93425 3.87653 6.71368 3.77588 6.47088C3.67523 6.22808 3.62343 5.96783 3.62343 5.705C3.62343 5.44217 3.67523 5.18192 3.77588 4.93912C3.87653 4.69632 4.02405 4.47575 4.21 4.29C4.39575 4.10405 4.61632 3.95653 4.85912 3.85588C5.10192 3.75523 5.36217 3.70343 5.625 3.70343C5.88783 3.70343 6.14808 3.75523 6.39088 3.85588C6.63368 3.95653 6.85425 4.10405 7.04 4.29L7.1 4.35C7.33568 4.58054 7.63502 4.73519 7.95941 4.794C8.28381 4.85282 8.61838 4.81312 8.92 4.68H9C9.29577 4.55324 9.54802 4.34276 9.72569 4.07447C9.90337 3.80618 9.99872 3.49179 10 3.17V3C10 2.46957 10.2107 1.96086 10.5858 1.58579C10.9609 1.21071 11.4696 1 12 1C12.5304 1 13.0391 1.21071 13.4142 1.58579C13.7893 1.96086 14 2.46957 14 3V3.09C14.0013 3.41179 14.0966 3.72618 14.2743 3.99447C14.452 4.26276 14.7042 4.47324 15 4.6C15.3016 4.73312 15.6362 4.77282 15.9606 4.714C16.285 4.65519 16.5843 4.50054 16.82 4.27L16.88 4.21C17.0657 4.02405 17.2863 3.87653 17.5291 3.77588C17.7719 3.67523 18.0322 3.62343 18.295 3.62343C18.5578 3.62343 18.8181 3.67523 19.0609 3.77588C19.3037 3.87653 19.5243 4.02405 19.71 4.21C19.896 4.39575 20.0435 4.61632 20.1441 4.85912C20.2448 5.10192 20.2966 5.36217 20.2966 5.625C20.2966 5.88783 20.2448 6.14808 20.1441 6.39088C20.0435 6.63368 19.896 6.85425 19.71 7.04L19.65 7.1C19.4195 7.33568 19.2648 7.63502 19.206 7.95941C19.1472 8.28381 19.1869 8.61838 19.32 8.92V9C19.4468 9.29577 19.6572 9.54802 19.9255 9.72569C20.1938 9.90337 20.5082 9.99872 20.83 10H21C21.5304 10 22.0391 10.2107 22.4142 10.5858C22.7893 10.9609 23 11.4696 23 12C23 12.5304 22.7893 13.0391 22.4142 13.4142C22.0391 13.7893 21.5304 14 21 14H20.91C20.5882 14.0013 20.2738 14.0966 20.0055 14.2743C19.7372 14.452 19.5268 14.7042 19.4 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div id="qr-container">
+          <div class="qr-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 3H10V10H3V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 3H21V10H14V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 14H10V21H3V14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 14H21V21H14V14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p>Aquí se generará tu código QR</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón de descarga -->
+      <button id="download-btn" class="download-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Descargar QR
+      </button>
+    </section>
+
+    <!-- Sidebar con opciones avanzadas -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Configuración</div>
+        <button class="close-sidebar" id="close-sidebar">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="sidebar-section">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 4H9C7.93913 4 6.92172 4.42143 6.17157 5.17157C5.42143 5.92172 5 6.93913 5 8C5 9.06087 5.42143 10.0783 6.17157 10.8284C6.92172 11.5786 7.93913 12 9 12H15C16.0609 12 17.0783 12.4214 17.8284 13.1716C18.5786 13.9217 19 14.9391 19 16C19 17.0609 18.5786 18.0783 17.8284 18.8284C17.0783 19.5786 16.0609 20 15 20H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 2V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Formato de Salida
+        </h3>
+        <div class="format-options">
+          <label class="radio-option">
+            <input type="radio" name="output-format" id="output-format-bitmap" checked>
+            Bitmap (PNG)
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="output-format" id="output-format-vector">
+            Vector (SVG)
+          </label>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 16V8C20.9996 7.64928 20.9071 7.30481 20.7315 7.00116C20.556 6.69752 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69752 3.26846 7.00116C3.09294 7.30481 3.00036 7.64928 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3.27 7L12 12L20.73 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 22V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Parámetros
+        </h3>
+        <div class="parameter-control">
+          <label for="scale-input">Escala (píxeles por módulo):</label>
+          <input type="number" id="scale-input" value="4" min="1" max="20">
+        </div>
+        <div class="parameter-control">
+          <label for="border-input">Borde (módulos):</label>
+          <input type="number" id="border-input" value="4" min="0" max="10">
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 4H9C7.93913 4 6.92172 4.42143 6.17157 5.17157C5.42143 5.92172 5 6.93913 5 8C5 9.06087 5.42143 10.0783 6.17157 10.8284C6.92172 11.5786 7.93913 12 9 12H15C16.0609 12 17.0783 12.4214 17.8284 13.1716C18.5786 13.9217 19 14.9391 19 16C19 17.0609 18.5786 18.0783 17.8284 18.8284C17.0783 19.5786 16.0609 20 15 20H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 2V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Estadísticas
+        </h3>
+        <div id="qr-stats"></div>
+      </div>
+    </div>
+
+    <!-- Overlay para cerrar el sidebar -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Modal para zoom -->
+    <div class="modal" id="zoom-modal">
+      <div class="modal-content">
+        <button class="modal-close" id="modal-close">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div id="modal-qr-container"></div>
+        <div class="modal-zoom-controls">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 3H21V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 21H3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 3L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 21L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <input type="range" id="zoom-input" value="100" min="50" max="300">
+          <span id="zoom-value">100%</span>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- Script para QR Code -->
+  <script type="module">
+
+    import { X as qrcodegen} from './public/qrcodegen.js';
+    // Función para generar el código QR en formato SVG
+    function toSvgString(qr, border, lightColor, darkColor) {
+      let parts = [];
+      for (let y = 0; y < qr.size; y++) {
+        for (let x = 0; x < qr.size; x++) {
+          if (qr.getModule(x, y)) {
+            parts.push(`M${x + border},${y + border}h1v1h-1z`);
+          }
+        }
+      }
+      return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${qr.size + border * 2} ${qr.size + border * 2}">
+  <rect width="100%" height="100%" fill="${lightColor}"/>
+  <path d="${parts.join(" ")}" fill="${darkColor}"/>
+</svg>`;
+    }
+
+    // Variables globales
+    let downloadData = ""; // Variable para almacenar los datos a descargar
+    let currentQR = null; // Variable para almacenar el QR actual
+    let hasQR = false;
+
+    // Función para generar el código QR
+    function generateQRCode() {
+      const text = document.getElementById("qr-input").value;
+      const container = document.getElementById("qr-container");
+      const downloadBtn = document.getElementById("download-btn");
+      container.innerHTML = ""; // Limpiar el QR anterior
+
+      if (!text) {
+        // Mostrar el placeholder si no hay texto
+        container.innerHTML = `
+          <div class="qr-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 3H10V10H3V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 3H21V10H14V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 14H10V21H3V14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 14H21V21H14V14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p>Aquí se generará tu código QR</p>
+          </div>
+        `;
+        downloadBtn.classList.remove("visible");
+        hasQR = false;
+        return; // No generar si el input está vacío
+      }
+
+      // Obtener parámetros de usuario
+      const scale = parseInt(document.getElementById("scale-input").value, 10);
+      const border = parseInt(document.getElementById("border-input").value, 10);
+      const isBitmap = document.getElementById("output-format-bitmap").checked;
+      const lightColor = "#ffffff";
+      const darkColor = "#000000";
+
+      try {
+        // Generar el QR con nivel de corrección MEDIUM
+        const qr = qrcodegen.QrCode.encodeText(text, qrcodegen.QrCode.Ecc.MEDIUM);
+        currentQR = qr; // Guardar referencia al QR actual
+        const size = qr.size;
+
+        if (isBitmap) {
+          // Crear un canvas para la salida bitmap
+          const canvas = document.createElement("canvas");
+          canvas.width = (size + border * 2) * scale;
+          canvas.height = (size + border * 2) * scale;
+          const ctx = canvas.getContext("2d");
+
+          // Dibujar fondo blanco
+          ctx.fillStyle = lightColor;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Dibujar módulos QR
+          for (let y = 0; y < size; y++) {
+            for (let x = 0; x < size; x++) {
+              if (qr.getModule(x, y)) {
+                ctx.fillStyle = darkColor;
+                ctx.fillRect((x + border) * scale, (y + border) * scale, scale, scale);
+              }
+            }
+          }
+          container.appendChild(canvas);
+          // Convertir el canvas a URL de imagen PNG
+          downloadData = canvas.toDataURL("image/png");
+        } else {
+          // Generar el SVG
+          const svgString = toSvgString(qr, border, lightColor, darkColor);
+          // Crear un elemento contenedor para el SVG
+          const div = document.createElement("div");
+          div.innerHTML = svgString;
+          const svgElement = div.firstElementChild;
+          // Ajustar el tamaño del SVG para la vista previa
+          svgElement.style.width = ((size + border * 2) * scale) + "px";
+          svgElement.style.height = ((size + border * 2) * scale) + "px";
+          container.appendChild(svgElement);
+          // Crear la URL para descargar el SVG
+          downloadData = "data:image/svg+xml," + encodeURIComponent(svgString);
+        }
+
+        // Hacer visible el botón de descarga
+        downloadBtn.classList.add("visible");
+        hasQR = true;
+
+        // Actualizar las estadísticas
+        const statsDiv = document.getElementById("qr-stats");
+        const statsHtml = `
+          <div class="stat-item">
+            <span>Versión:</span>
+            <span>${qr.version}</span>
+          </div>
+          <div class="stat-item">
+            <span>Tamaño (módulos):</span>
+            <span>${qr.size}×${qr.size}</span>
+          </div>
+          <div class="stat-item">
+            <span>Caracteres:</span>
+            <span>${text.length}</span>
+          </div>
+        `;
+        statsDiv.innerHTML = statsHtml;
+
+        // Preparar el modal QR
+        updateModalQR();
+      } catch (e) {
+        console.error(e);
+        const statsDiv = document.getElementById("qr-stats");
+        statsDiv.innerHTML = `<div style="color: var(--error-color)">Error: ${e.message}</div>`;
+      }
+    }
+
+    // Función para actualizar el QR en el modal
+    function updateModalQR() {
+      if (!currentQR || !hasQR) return;
+      
+      const modalContainer = document.getElementById("modal-qr-container");
+      modalContainer.innerHTML = "";
+      
+      const scale = parseInt(document.getElementById("scale-input").value, 10);
+      const border = parseInt(document.getElementById("border-input").value, 10);
+      const isBitmap = document.getElementById("output-format-bitmap").checked;
+      const lightColor = "#ffffff";
+      const darkColor = "#000000";
+      const zoomValue = document.getElementById("zoom-input").value;
+      const zoomScale = parseInt(zoomValue) / 100;
+      
+      const size = currentQR.size;
+      
+      if (isBitmap) {
+        const canvas = document.createElement("canvas");
+        const baseSize = (size + border * 2) * scale;
+        canvas.width = baseSize;
+        canvas.height = baseSize;
+        const ctx = canvas.getContext("2d");
+        
+        // Dibujar fondo blanco
+        ctx.fillStyle = lightColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Dibujar módulos QR
+        for (let y = 0; y < size; y++) {
+          for (let x = 0; x < size; x++) {
+            if (currentQR.getModule(x, y)) {
+              ctx.fillStyle = darkColor;
+              ctx.fillRect((x + border) * scale, (y + border) * scale, scale, scale);
+            }
+          }
+        }
+        
+        // Crear un contenedor para el canvas escalado
+        const container = document.createElement("div");
+        container.style.width = (baseSize * zoomScale) + "px";
+        container.style.height = (baseSize * zoomScale) + "px";
+        container.style.overflow = "auto";
+        
+        // Aplicar zoom
+        canvas.style.width = (baseSize * zoomScale) + "px";
+        canvas.style.height = (baseSize * zoomScale) + "px";
+        
+        container.appendChild(canvas);
+        modalContainer.appendChild(container);
+      } else {
+        const svgString = toSvgString(currentQR, border, lightColor, darkColor);
+        const div = document.createElement("div");
+        div.innerHTML = svgString;
+        const svgElement = div.firstElementChild;
+        
+        // Crear un contenedor para el SVG escalado
+        const container = document.createElement("div");
+        const baseSize = (size + border * 2) * scale;
+        container.style.width = (baseSize * zoomScale) + "px";
+        container.style.height = (baseSize * zoomScale) + "px";
+        container.style.overflow = "auto";
+        
+        // Ajustar el tamaño del SVG con el zoom
+        svgElement.style.width = (baseSize * zoomScale) + "px";
+        svgElement.style.height = (baseSize * zoomScale) + "px";
+        
+        container.appendChild(svgElement);
+        modalContainer.appendChild(container);
+      }
+    }
+
+    // Funcionalidad para pegar del portapapeles
+    document.getElementById("paste-btn").addEventListener("click", async function() {
+      try {
+        const text = await navigator.clipboard.readText();
+        document.getElementById("qr-input").value = text;
+        generateQRCode(); // Generar QR con el texto pegado
+      } catch (err) {
+        console.error('Error al acceder al portapapeles: ', err);
+        alert('No se pudo acceder al portapapeles. Es posible que necesites dar permisos o usar un navegador compatible.');
+      }
+    });
+
+    // Inicializar evento para toggle del sidebar con el nuevo botón en qr-preview-container
+    document.getElementById("settings-toggle-alt").addEventListener("click", function() {
+      document.getElementById("sidebar").classList.add("open");
+      document.getElementById("overlay").classList.add("active");
+    });
+
+    document.getElementById("close-sidebar").addEventListener("click", function() {
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("overlay").classList.remove("active");
+    });
+
+    document.getElementById("overlay").addEventListener("click", function() {
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("overlay").classList.remove("active");
+    });
+
+    // Eventos para abrir/cerrar el modal
+    document.getElementById("qr-container").addEventListener("click", function() {
+      if (hasQR) {
+        document.getElementById("zoom-modal").classList.add("active");
+        updateModalQR();
+      }
+    });
+
+    document.getElementById("modal-close").addEventListener("click", function() {
+      document.getElementById("zoom-modal").classList.remove("active");
+    });
+
+    // Actualizar el QR cuando se modifique cualquier parámetro
+    document.getElementById("qr-input").addEventListener("input", generateQRCode);
+    document.getElementById("scale-input").addEventListener("input", generateQRCode);
+    document.getElementById("border-input").addEventListener("input", generateQRCode);
+    document.getElementById("output-format-bitmap").addEventListener("change", generateQRCode);
+    document.getElementById("output-format-vector").addEventListener("change", generateQRCode);
+
+    // Control de zoom en el modal
+    document.getElementById("zoom-input").addEventListener("input", function() {
+      const zoomValue = document.getElementById("zoom-value");
+      const zoomPercent = this.value;
+      zoomValue.innerText = zoomPercent + "%";
+      updateModalQR();
+    });
+
+    // Funcionalidad del botón de descarga
+    document.getElementById("download-btn").addEventListener("click", function() {
+      if (!downloadData) return;
+      const a = document.createElement("a");
+      const isBitmap = document.getElementById("output-format-bitmap").checked;
+      a.download = "qr-code." + (isBitmap ? "png" : "svg");
+      a.href = downloadData;
+      a.click();
+    });
+
+    // Generar el QR inicialmente
+    window.addEventListener('load', generateQRCode);
+  </script>
+</body>
+</html>

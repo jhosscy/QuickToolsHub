@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@std/media-types": "npm:@jsr/std__media-types"
+  }
+}

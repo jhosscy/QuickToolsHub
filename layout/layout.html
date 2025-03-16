@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Herramientas Digitales</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #f5f5f5;
+      --accent-color: #444444;
+      --highlight-color: #666666;
+      --success-color: #4CAF50;
+      --error-color: #f44336;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background-color: var(--card-bg);
+      padding: 1rem 1rem;
+      margin-bottom: 50px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+      width: 100%;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column-reverse;
+      row-gap: 1rem;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+
+    .home-link {
+      color: var(--text-color);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+    }
+
+    .home-link:hover {
+      color: var(--highlight-color);
+    }
+
+    main {
+      margin-bottom: 30px;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Responsive adjustments */
+    @media (min-width: 450px) {
+      header {
+        padding: 1rem 2rem;
+      }
+      nav {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .icon {
+      display: inline-block;
+      stroke-width: 0;
+      stroke: currentColor;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/" class="home-link">
+        <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        Inicio
+      </a>
+      <h1>Herramientas Digitales</h1>
+    </nav>
+  </header>
+
+  <main>
+  </main>
+</body>
+</html>
