@@ -4,12 +4,12 @@ import qrgenerator from './src/qrgenerator.html';
 import header from './header.ts';
 
 const server = Bun.serve({
+  port: 10000,
   routes: {
     '/': homepage,
     '/qrscanner': qrscanner,
     '/qrgenerator': qrgenerator
   },
-  development: false,
   fetch: async (req: Request) => {
     const pathname = new URL(req.url).pathname;
     const file = await Bun.file(`${Bun.cwd}/${pathname}`)
